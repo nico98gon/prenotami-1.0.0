@@ -50,7 +50,7 @@ class Prenota:
             print(user_config.get("full_address"))
             chrome_options = ChromeOptions() #Some changes for optimize the load
             chrome_options.add_experimental_option("detach", True)
-            chrome_options.add_argument("--start-maximized")
+            # chrome_options.add_argument("--start-maximized")
             chrome_options.add_argument("--disable-dev-shm-usage")
             chrome_options.add_argument('--blink-settings=imagesEnabled=false')
             chrome_options.add_argument("--no-sandbox")
@@ -65,9 +65,11 @@ class Prenota:
                     EC.presence_of_element_located((By.ID, "login-email"))
                 )
                 password_box = driver.find_element(By.ID, "login-password")
+                time.sleep(1)
                 email_box.send_keys(email)
+                time.sleep(1)
                 password_box.send_keys(password)
-                time.sleep(4) #2 default
+                time.sleep(2) #2 default
                 button = driver.find_elements(
                     By.XPATH, "//button[contains(@class,'button primary g-recaptcha')]"
                 )
@@ -75,7 +77,7 @@ class Prenota:
                 logging.info(
                     f"Timestamp: {str(datetime.now())} - Successfuly logged in."
                 )
-                time.sleep(10)#Waiting some time to fully load after login and skip errors
+                time.sleep(10) #Waiting some time to fully load after login and skip errors
 
             except Exception as e:
                 logging.info(f"Exception: {e}")
@@ -114,11 +116,11 @@ class Prenota:
                         break		
                 elif user_config["request_type"] == "passport":
                     try:
-                        time.sleep(10) #Waiting some time to fully load and skip errors                        
-                        driver.get("https://prenotami.esteri.it/Services/Booking/1319")#/Booking/671
+                        # time.sleep(10) #Waiting some time to fully load and skip errors                        
+                        driver.get("https://prenotami.esteri.it/Services/Booking/4685")#/Booking/671
                         time.sleep(5) #Waiting some time to fully load and skip errors
                         #driver.get("https://prenotami.esteri.it/Services/Booking/671")
-                        #time.sleep(10) #Waiting some time to fully load and skip errors                       
+                        #time.sleep(10) #Waiting some time to fully load and skip errors
 
                         try:
                             appts_available = driver.find_element(
@@ -143,28 +145,39 @@ class Prenota:
                                 with open("files/passport_form.html", "w") as f:
                                     f.write(driver.page_source)
 
-                                q0 = Select(driver.find_element(By.ID,"ddls_0"))
-                                q0.select_by_visible_text(
-                                    user_config.get("possess_expired_passport")
-                                )
+                                s0 = Select(driver.find_element(By.ID, "DatiAddizionaliPrenotante_0___testo"))
+                                s0.select_by_value(user_config.get("booking_value"))
 
-                                q1 = Select(driver.find_element(By.ID,"ddls_1"))
-                                q1.select_by_visible_text(
-                                    user_config.get("possess_expired_passport")
-                                )
+                                if user_config["booking_value"] == "2":
+                                    s1 = Select(driver.find_element(By.ID, "ddlnumberofcompanions"))
+                                    s1.select_by_value(user_config.get("number_of_companions"))
 
-                                q2 = driver.find_element(By.ID,
-                                    "DatiAddizionaliPrenotante_2___testo"
-                                )
-                                q2.send_keys(user_config.get("total_children"))
+                                q0 = Select(driver.find_element(By.ID, "DatiAddizionaliPrenotante_0___testo"))
+                                q0.send_keys(user_config.get("full_address"))
 
-                                q3 = driver.find_element(By.ID,
-                                    "DatiAddizionaliPrenotante_3___testo"
-                                )
-                                q3.send_keys(user_config.get("full_address"))
+                                s2 = Select(driver.find_element(By.ID, "ddls_1"))
+                                s2.select_by_visible_text(user_config.get("has_under_age_children"))
 
-                                q4 = Select(driver.find_element(By.ID,"ddls_4"))
-                                q4.select_by_visible_text(user_config.get("marital_status"))
+                                q1 = Select(driver.find_element(By.ID, "DatiAddizionaliPrenotante_2___testo"))
+                                q1.send_keys(user_config.get("total_children"))
+
+                                s3 = Select(driver.find_element(By.ID,"ddls_3"))
+                                s3.select_by_visible_text(user_config.get("marital_status"))
+
+                                q2 = Select(driver.find_element(By.ID, "DatiAddizionaliPrenotante_4___testo"))
+                                q2.send_keys(user_config.get("name_surname_couple"))
+
+                                s4 = Select(driver.find_element(By.ID,"ddls_5"))
+                                s4.select_by_visible_text(user_config.get("possess_expired_passport"))
+
+                                q3 = Select(driver.find_element(By.ID, "DatiAddizionaliPrenotante_6___testo"))
+                                q3.send_keys(user_config.get("passport_number"))
+
+                                q4 = Select(driver.find_element(By.ID, "DatiAddizionaliPrenotante_7___testo"))
+                                q4.send_keys(user_config.get("height"))
+
+                                s5 = Select(driver.find_element(By.ID,"ddls_8"))
+                                s5.select_by_visible_text(user_config.get("eye_color"))
 
                                 time.sleep(1)
 
@@ -175,6 +188,64 @@ class Prenota:
 
                                 file1 = driver.find_element(By.XPATH,'//*[@id="File_1"]')
                                 file1.send_keys(os.getcwd() + "/files/residencia.pdf")
+
+                                # Additional applicant data
+                                if user_config["booking_value"] == "2":
+                                    q5 = Select(driver.find_element(By.ID, "Accompagnatori_0__CognomeAccompagnatore"))
+                                    q5.send_keys(user_config.get("surname_1"))
+                                    
+                                    q6 = Select(driver.find_element(By.ID, "Accompagnatori_0__NomeAccompagnatore"))
+                                    q6.send_keys(user_config.get("name_1"))
+
+                                    date_1 = Select(driver.find_element(By.ID,"Accompagnatori_0__DataNascitaAccompagnatore"))
+                                    date_1.send_keys(user_config.get("date_of_birth_1"))
+
+                                    s6 = Select(driver.find_element(By.ID,"TypeOfRelationDDL0"))
+                                    s6.select_by_visible_text(user_config.get("kinship_relationship_1"))
+
+                                    q7 = Select(driver.find_element(By.ID, "Accompagnatori_0__DatiAddizionaliAccompagnatore_0___testo"))
+                                    q7.send_keys(user_config.get("full_address_1"))
+
+                                    s7 = Select(driver.find_element(By.ID,"ddlsAcc_0_1"))
+                                    s7.select_by_visible_text(user_config.get("has_under_age_children_1"))
+
+                                    q7 = Select(driver.find_element(By.ID, "Accompagnatori_0__DatiAddizionaliAccompagnatore_2___testo"))
+                                    q7.send_keys(user_config.get("total_children_1"))
+
+                                    s8 = Select(driver.find_element(By.ID,"ddlsAcc_0_3"))
+                                    s8.select_by_visible_text(user_config.get("marital_status_1"))
+
+                                    q8 = Select(driver.find_element(By.ID, "Accompagnatori_0__DatiAddizionaliAccompagnatore_4___testo"))
+                                    q8.send_keys(user_config.get("name_surname_couple_1"))
+
+                                    s9 = Select(driver.find_element(By.ID,"ddlsAcc_0_5"))
+                                    s9.select_by_visible_text(user_config.get("possess_expired_passport"))
+
+                                    q9 = Select(driver.find_element(By.ID, "Accompagnatori_0__DatiAddizionaliAccompagnatore_6___testo"))
+                                    q9.send_keys(user_config.get("passport_number"))
+
+                                    q10 = Select(driver.find_element(By.ID, "Accompagnatori_0__DatiAddizionaliAccompagnatore_7___testo"))
+                                    q10.send_keys(user_config.get("height"))
+
+                                    s10 = Select(driver.find_element(By.ID,"ddlsAcc_0_8"))
+                                    s10.select_by_visible_text(user_config.get("eye_color"))
+
+                                    time.sleep(1)
+
+                                    file0 = driver.find_element(By.XPATH,'//*[@id="File_0"]')
+                                    file0.send_keys(os.getcwd() + "/files/identidade_1.pdf")
+
+                                    time.sleep(1)
+
+                                    file1 = driver.find_element(By.XPATH,'//*[@id="File_1"]')
+                                    file1.send_keys(os.getcwd() + "/files/residencia_1.pdf")
+
+                                otp_send = driver.find_element(By.ID,"otp-send")
+                                otp_send.click()
+
+                                otp_input = driver.find_element(By.ID,"otp-input")
+                                otp_code = input("Ingrese el código OTP recibido por correo: ")
+                                otp_input.send_keys(otp_code)
 
                                 checkBox = driver.find_element(By.ID,"PrivacyCheck")
                                 checkBox.click()
@@ -194,6 +265,9 @@ class Prenota:
                 "Required files not available. Check the required files in readme.md file. Ending execution."
             )
             sys.exit(0)
+        current_window = driver.current_window_handle
+        print("Current window:", current_window)
+
         user_input = input(
             f"Timestamp: {str(datetime.now())} - Go ahead and fill manually the rest of the process. When finished, type quit to exit the program and close the browser. "
         )
