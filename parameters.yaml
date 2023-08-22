@@ -22,7 +22,7 @@ has_under_age_children_1: "No" #Si or No
 total_children_1: "0" # Total number of children
 marital_status_1: "Cebile/Nubile" # 'Coniugato/a', 'Divorziato/a', 'Vedovo/a', 'Celibe/Nubile', 'Separato/a', 'Unito/a Civilmente' 'Separato/a da Un. Civ.', 'Divorziato/a da Un. Civ.', 'Vedovo/a da Un. Civ.'
 name_surname_couple_1: ""
-possess_expired_passport: "Si" # Si or No
-passport_number: "AA3978072"
-height: "160" # in cm
-eye_color: "Marrone" # 'Marrone' ------------------
+possess_expired_passport_1: "Si" # Si or No
+passport_number_1: "AA3978072"
+height_1: "160" # in cm
+eye_color_1: "Marrone" # 'Marrone' ------------------
