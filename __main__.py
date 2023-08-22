@@ -83,7 +83,7 @@ class Prenota:
                 logging.info(f"Exception: {e}")
 
             for i in range(200):
-                random_number = random.randint(1, 5)
+                random_number = random.randint(1, 3)
 
                 if user_config["request_type"] == "citizenship":
                     try:
@@ -180,12 +180,12 @@ class Prenota:
                                 s5 = Select(driver.find_element(By.ID,"ddls_8"))
                                 s5.select_by_visible_text(user_config.get("eye_color"))
 
-                                time.sleep(1)
+                                # time.sleep(1)
 
                                 file0 = driver.find_element(By.XPATH,'//*[@id="File_0"]')
                                 file0.send_keys(os.getcwd() + "/files/identidade.pdf")
 
-                                time.sleep(1)
+                                # time.sleep(1)
 
                                 file1 = driver.find_element(By.XPATH,'//*[@id="File_1"]')
                                 file1.send_keys(os.getcwd() + "/files/residencia.pdf")
@@ -231,12 +231,12 @@ class Prenota:
                                     s10 = Select(driver.find_element(By.ID,"ddlsAcc_0_8"))
                                     s10.select_by_visible_text(user_config.get("eye_color_1"))
 
-                                    time.sleep(1)
+                                    # time.sleep(1)
 
                                     file0 = driver.find_element(By.XPATH,'//*[@id="Accompagnatori_0__DocumentiAccompagnatore_0___File"]')
                                     file0.send_keys(os.getcwd() + "/files/identidade_1.pdf")
 
-                                    time.sleep(1)
+                                    # time.sleep(1)
 
                                     file1 = driver.find_element(By.XPATH,'//*[@id="Accompagnatori_0__DocumentiAccompagnatore_1___File"]')
                                     file1.send_keys(os.getcwd() + "/files/residencia_1.pdf")
