@@ -65,11 +65,11 @@ class Prenota:
                     EC.presence_of_element_located((By.ID, "login-email"))
                 )
                 password_box = driver.find_element(By.ID, "login-password")
-                time.sleep(1)
+                # time.sleep(1)
                 email_box.send_keys(email)
-                time.sleep(1)
+                # time.sleep(1)
                 password_box.send_keys(password)
-                time.sleep(2) #2 default
+                # time.sleep(2) #2 default
                 button = driver.find_elements(
                     By.XPATH, "//button[contains(@class,'button primary g-recaptcha')]"
                 )
@@ -77,7 +77,7 @@ class Prenota:
                 logging.info(
                     f"Timestamp: {str(datetime.now())} - Successfuly logged in."
                 )
-                time.sleep(10) #Waiting some time to fully load after login and skip errors
+                time.sleep(6) #Waiting some time to fully load after login and skip errors
 
             except Exception as e:
                 logging.info(f"Exception: {e}")
@@ -118,7 +118,10 @@ class Prenota:
                     try:
                         driver.get("https://prenotami.esteri.it/Services/Booking/4685")#/Booking/671
                         # driver.get("file:///D:/Downloads/Booking%20-%20Prenot@Mi.html")
-                        time.sleep(3) #Waiting some time to fully load and skip errors
+                        # time.sleep(3) #Waiting some time to fully load and skip errors
+                        element = WebDriverWait(driver, 10).until(
+                            EC.presence_of_element_located((By.ID, "typeofbookingddl"))
+                        )
 
                         try:
                             appts_available = driver.find_element(
