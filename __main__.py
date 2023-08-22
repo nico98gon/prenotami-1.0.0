@@ -116,12 +116,9 @@ class Prenota:
                         break		
                 elif user_config["request_type"] == "passport":
                     try:
-                        # time.sleep(10) #Waiting some time to fully load and skip errors                        
                         # driver.get("https://prenotami.esteri.it/Services/Booking/4685")#/Booking/671
                         driver.get("file:///D:/Downloads/Booking%20-%20Prenot@Mi.html")
                         time.sleep(5) #Waiting some time to fully load and skip errors
-                        #driver.get("https://prenotami.esteri.it/Services/Booking/671")
-                        #time.sleep(10) #Waiting some time to fully load and skip errors
 
                         try:
                             appts_available = driver.find_element(
@@ -220,16 +217,16 @@ class Prenota:
                                     q9.send_keys(user_config.get("name_surname_couple_1"))
 
                                     # s9 = Select(driver.find_element(By.ID,"ddlsAcc_0_5"))
-                                    # s9.select_by_visible_text(user_config.get("possess_expired_passport"))
+                                    # s9.select_by_visible_text(user_config.get("possess_expired_passport_1"))
 
                                     q10 = driver.find_element(By.ID, "Accompagnatori_0__DatiAddizionaliAccompagnatore_6___testo")
-                                    q10.send_keys(user_config.get("passport_number"))
+                                    q10.send_keys(user_config.get("passport_number_1"))
 
                                     q11 = driver.find_element(By.ID, "Accompagnatori_0__DatiAddizionaliAccompagnatore_7___testo")
-                                    q11.send_keys(user_config.get("height"))
+                                    q11.send_keys(user_config.get("height_1"))
 
                                     # s10 = Select(driver.find_element(By.ID,"ddlsAcc_0_8"))
-                                    # s10.select_by_visible_text(user_config.get("eye_color"))
+                                    # s10.select_by_visible_text(user_config.get("eye_color_1"))
 
                                     time.sleep(1)
 
