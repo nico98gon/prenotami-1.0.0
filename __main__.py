@@ -50,12 +50,12 @@ class Prenota:
             print(user_config.get("full_address"))
             chrome_options = ChromeOptions() #Some changes for optimize the load
             chrome_options.add_experimental_option("detach", True)
-            # chrome_options.add_argument("--start-maximized")
+            chrome_options.add_argument("--start-maximized")
             chrome_options.add_argument("--disable-dev-shm-usage")
             chrome_options.add_argument('--blink-settings=imagesEnabled=false')
             chrome_options.add_argument("--no-sandbox")
             driver = webdriver.Chrome(
-                options=chrome_options, service=Service(ChromeDriverManager(version="114.0.5735.90").install(), #Some Changes for fix deprecated executable_path
+                options=chrome_options, service=Service(ChromeDriverManager().install(), #Some Changes for fix deprecated executable_path
             ))
 
             # try:
@@ -156,8 +156,8 @@ class Prenota:
                                 q0 = driver.find_element(By.ID, "DatiAddizionaliPrenotante_0___testo")
                                 q0.send_keys(user_config.get("full_address"))
 
-                                s2 = Select(driver.find_element(By.ID, "ddls_1"))
-                                s2.select_by_visible_text(user_config.get("has_under_age_children"))
+                                # s2 = Select(driver.find_element(By.ID, "ddls_1"))
+                                # s2.select_by_visible_text(user_config.get("has_under_age_children"))
 
                                 q1 = driver.find_element(By.ID, "DatiAddizionaliPrenotante_2___testo")
                                 q1.send_keys(user_config.get("total_children"))
@@ -168,8 +168,8 @@ class Prenota:
                                 q2 = driver.find_element(By.ID, "DatiAddizionaliPrenotante_4___testo")
                                 q2.send_keys(user_config.get("name_surname_couple"))
 
-                                s4 = Select(driver.find_element(By.ID,"ddls_5"))
-                                s4.select_by_visible_text(user_config.get("possess_expired_passport"))
+                                # s4 = Select(driver.find_element(By.ID,"ddls_5"))
+                                # s4.select_by_visible_text(user_config.get("possess_expired_passport"))
 
                                 q3 = driver.find_element(By.ID, "DatiAddizionaliPrenotante_6___testo")
                                 q3.send_keys(user_config.get("passport_number"))
@@ -177,8 +177,8 @@ class Prenota:
                                 q4 = driver.find_element(By.ID, "DatiAddizionaliPrenotante_7___testo")
                                 q4.send_keys(user_config.get("height"))
 
-                                s5 = Select(driver.find_element(By.ID,"ddls_8"))
-                                s5.select_by_visible_text(user_config.get("eye_color"))
+                                # s5 = Select(driver.find_element(By.ID,"ddls_8"))
+                                # s5.select_by_visible_text(user_config.get("eye_color"))
 
                                 time.sleep(1)
 
@@ -198,47 +198,47 @@ class Prenota:
                                     q6 = driver.find_element(By.ID, "Accompagnatori_0__NomeAccompagnatore")
                                     q6.send_keys(user_config.get("name_1"))
 
-                                    date_1 = Select(driver.find_element(By.ID,"Accompagnatori_0__DataNascitaAccompagnatore"))
+                                    date_1 = driver.find_element(By.ID,"Accompagnatori_0__DataNascitaAccompagnatore")
                                     date_1.send_keys(user_config.get("date_of_birth_1"))
 
-                                    s6 = Select(driver.find_element(By.ID,"TypeOfRelationDDL0"))
-                                    s6.select_by_visible_text(user_config.get("kinship_relationship_1"))
+                                    # s6 = Select(driver.find_element(By.ID,"TypeOfRelationDDL0"))
+                                    # s6.select_by_visible_text(user_config.get("kinship_relationship_1"))
 
                                     q7 = driver.find_element(By.ID, "Accompagnatori_0__DatiAddizionaliAccompagnatore_0___testo")
                                     q7.send_keys(user_config.get("full_address_1"))
 
-                                    s7 = Select(driver.find_element(By.ID,"ddlsAcc_0_1"))
-                                    s7.select_by_visible_text(user_config.get("has_under_age_children_1"))
+                                    # s7 = Select(driver.find_element(By.ID,"ddlsAcc_0_1"))
+                                    # s7.select_by_visible_text(user_config.get("has_under_age_children_1"))
 
-                                    q7 = Select(driver.find_element(By.ID, "Accompagnatori_0__DatiAddizionaliAccompagnatore_2___testo"))
-                                    q7.send_keys(user_config.get("total_children_1"))
+                                    q8 = driver.find_element(By.ID, "Accompagnatori_0__DatiAddizionaliAccompagnatore_2___testo")
+                                    q8.send_keys(user_config.get("total_children_1"))
 
-                                    s8 = Select(driver.find_element(By.ID,"ddlsAcc_0_3"))
-                                    s8.select_by_visible_text(user_config.get("marital_status_1"))
+                                    # s8 = Select(driver.find_element(By.ID,"ddlsAcc_0_3"))
+                                    # s8.select_by_visible_text(user_config.get("marital_status_1"))
 
-                                    q8 = driver.find_element(By.ID, "Accompagnatori_0__DatiAddizionaliAccompagnatore_4___testo")
-                                    q8.send_keys(user_config.get("name_surname_couple_1"))
+                                    q9 = driver.find_element(By.ID, "Accompagnatori_0__DatiAddizionaliAccompagnatore_4___testo")
+                                    q9.send_keys(user_config.get("name_surname_couple_1"))
 
-                                    s9 = Select(driver.find_element(By.ID,"ddlsAcc_0_5"))
-                                    s9.select_by_visible_text(user_config.get("possess_expired_passport"))
+                                    # s9 = Select(driver.find_element(By.ID,"ddlsAcc_0_5"))
+                                    # s9.select_by_visible_text(user_config.get("possess_expired_passport"))
 
-                                    q9 = driver.find_element(By.ID, "Accompagnatori_0__DatiAddizionaliAccompagnatore_6___testo")
-                                    q9.send_keys(user_config.get("passport_number"))
+                                    q10 = driver.find_element(By.ID, "Accompagnatori_0__DatiAddizionaliAccompagnatore_6___testo")
+                                    q10.send_keys(user_config.get("passport_number"))
 
-                                    q10 = driver.find_element(By.ID, "Accompagnatori_0__DatiAddizionaliAccompagnatore_7___testo")
-                                    q10.send_keys(user_config.get("height"))
+                                    q11 = driver.find_element(By.ID, "Accompagnatori_0__DatiAddizionaliAccompagnatore_7___testo")
+                                    q11.send_keys(user_config.get("height"))
 
-                                    s10 = Select(driver.find_element(By.ID,"ddlsAcc_0_8"))
-                                    s10.select_by_visible_text(user_config.get("eye_color"))
+                                    # s10 = Select(driver.find_element(By.ID,"ddlsAcc_0_8"))
+                                    # s10.select_by_visible_text(user_config.get("eye_color"))
 
                                     time.sleep(1)
 
-                                    file0 = driver.find_element(By.XPATH,'//*[@id="File_0"]')
+                                    file0 = driver.find_element(By.XPATH,'//*[@id="Accompagnatori_0__DocumentiAccompagnatore_0___File"]')
                                     file0.send_keys(os.getcwd() + "/files/identidade_1.pdf")
 
                                     time.sleep(1)
 
-                                    file1 = driver.find_element(By.XPATH,'//*[@id="File_1"]')
+                                    file1 = driver.find_element(By.XPATH,'//*[@id="Accompagnatori_0__DocumentiAccompagnatore_1___File"]')
                                     file1.send_keys(os.getcwd() + "/files/residencia_1.pdf")
 
                                 otp_send = driver.find_element(By.ID,"otp-send")
