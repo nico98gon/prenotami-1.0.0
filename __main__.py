@@ -11,12 +11,14 @@ from selenium.webdriver.support.ui import Select
 from datetime import datetime
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.common.exceptions import NoSuchElementException
+from keyboard import wait
 from time import sleep
 import logging
 import yaml
 import sys
 import time
 import random
+import keyboard
 
 load_dotenv()
 
@@ -131,6 +133,10 @@ class Prenota:
                         logging.info(
                                 f"Timestamp: {str(datetime.now())} - Scheduling is not available right now. Running while function"
                             )
+                        if keyboard.is_pressed("p"):
+                            print("Bot paused. Press R to continue.")
+                            wait("r")
+                            print("Bot resumed.")
                         time.sleep(2)
 
                     appts_available = driver.find_elements(By.XPATH, "//*[@id='WlNotAvailable']")
