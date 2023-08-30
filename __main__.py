@@ -1,10 +1,11 @@
 import os
 from dotenv import load_dotenv
 from selenium import webdriver
-from selenium.webdriver.chrome.service import Service #Fix deprecated executable_path
+# from selenium.webdriver.chrome.service import Service #Fix deprecated executable_path
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver import EdgeOptions
 from selenium.common.exceptions import TimeoutException
 from selenium.webdriver import ChromeOptions
 from selenium.webdriver.support.ui import Select
@@ -50,15 +51,18 @@ class Prenota:
             password = os.getenv("password_prenotami")
             user_config = load_config("parameters.yaml")
             print(user_config.get("full_address"))
-            chrome_options = ChromeOptions() #Some changes for optimize the load
-            chrome_options.add_experimental_option("detach", True)
-            chrome_options.add_argument("--start-maximized")
-            chrome_options.add_argument("--disable-dev-shm-usage")
-            chrome_options.add_argument('--blink-settings=imagesEnabled=false')
-            chrome_options.add_argument("--no-sandbox")
-            driver = webdriver.Chrome(
-                options=chrome_options, service=Service(ChromeDriverManager().install(), #Some Changes for fix deprecated executable_path
-            ))
+            # chrome_options = ChromeOptions() #Some changes for optimize the load
+            # chrome_options.add_experimental_option("detach", True)
+            # chrome_options.add_argument("--start-maximized")
+            # chrome_options.add_argument("--disable-dev-shm-usage")
+            # chrome_options.add_argument('--blink-settings=imagesEnabled=false')
+            # chrome_options.add_argument("--no-sandbox")
+            # driver = webdriver.Chrome(
+            #     options=chrome_options, service=Service(ChromeDriverManager().install(), #Some Changes for fix deprecated executable_path
+            # ))
+            edge_options = EdgeOptions()
+            edge_options.use_chromium = True  # Set this to True for Chromium-based Edge
+            driver = webdriver.Edge(executable_path="D:\Downloads\msedgedriver.exe", options=edge_options)
 
             try:
                 driver.get("https://prenotami.esteri.it/")
