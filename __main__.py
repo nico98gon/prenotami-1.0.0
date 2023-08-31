@@ -121,10 +121,11 @@ class Prenota:
                         logging.info(f"Exception {e}")
                         break		
                 elif user_config["request_type"] == "passport":
-                    def get_page(driver): 
+                    any_key = input("Press enter to start while loop that tries to access the form")
+                    def get_page(driver):
                         try:
-                            driver.get("https://prenotami.esteri.it/Services/Booking/4685")#/Booking/671 
-                            element = WebDriverWait(driver, 6).until( EC.presence_of_element_located((By.ID, "typeofbookingddl")) )
+                            driver.get("https://prenotami.esteri.it/Services/Booking/4685")
+                            element = WebDriverWait(driver, 6).until(EC.presence_of_element_located((By.ID, "typeofbookingddl")))
                             selects = driver.find_elements(By.TAG_NAME, "select")
                             for select in selects:
                                 s = Select(select)
@@ -133,14 +134,23 @@ class Prenota:
                             return True
                         except TimeoutException:
                             return False
+                    
+                    paused = False
                     while not get_page(driver):
-                        logging.info(
-                                f"Timestamp: {str(datetime.now())} - Scheduling is not available right now. Running while function"
-                            )
+                        logging.info(f"Timestamp: {str(datetime.now())} - Scheduling is not available right now. Running while function")
+                        
                         if keyboard.is_pressed("p"):
-                            print("Bot paused. Press R to continue.")
-                            wait("r")
-                            print("Bot resumed.")
+                            print("Bot paused. Press 'r' to continue.")
+                            while True:
+                                if keyboard.is_pressed("r"):
+                                    print("Bot resumed.")
+                                    break
+                                time.sleep(0.1)
+                            paused = False
+
+                        if paused:
+                            continue
+
                         time.sleep(2)
 
                     appts_available = driver.find_elements(By.XPATH, "//*[@id='WlNotAvailable']")
@@ -155,6 +165,9 @@ class Prenota:
 
                             with open("files/passport_form.html", "w") as f:
                                 f.write(driver.page_source)
+
+                            otp_send = driver.find_element(By.ID,"otp-send")
+                            otp_send.click()
 
                             s0 = Select(driver.find_element(By.ID, "typeofbookingddl"))
                             s0.select_by_value(user_config.get("booking_value"))
@@ -251,11 +264,8 @@ class Prenota:
                                 file1 = driver.find_element(By.XPATH,'//*[@id="Accompagnatori_0__DocumentiAccompagnatore_1___File"]')
                                 file1.send_keys(os.getcwd() + "/files/residencia_1.pdf")
 
-                            otp_send = driver.find_element(By.ID,"otp-send")
-                            otp_send.click()
-
                             otp_input = driver.find_element(By.ID,"otp-input")
-                            otp_code = input("Ingrese el código OTP recibido por correo: ")
+                            otp_code = input("Insert the OTP code arrived in mail: ")
                             otp_input.send_keys(otp_code)
 
                             checkBox = driver.find_element(By.ID,"PrivacyCheck")
