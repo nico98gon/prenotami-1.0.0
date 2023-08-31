@@ -6,7 +6,8 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver import EdgeOptions
-from selenium.common.exceptions import TimeoutException
+from selenium.common.exceptions import NoSuchElementException, StaleElementReferenceException, TimeoutException
+# from selenium.common.exceptions import TimeoutException
 from selenium.webdriver import ChromeOptions
 from selenium.webdriver.support.ui import Select
 from datetime import datetime
@@ -126,11 +127,6 @@ class Prenota:
                         try:
                             driver.get("https://prenotami.esteri.it/Services/Booking/4685")
                             element = WebDriverWait(driver, 6).until(EC.presence_of_element_located((By.ID, "typeofbookingddl")))
-                            selects = driver.find_elements(By.TAG_NAME, "select")
-                            for select in selects:
-                                s = Select(select)
-                                if len(s.options) == 0:
-                                    return False
                             return True
                         except TimeoutException:
                             return False
@@ -163,45 +159,58 @@ class Prenota:
                         else:
                             logging.info(f"Timestamp: {str(datetime.now())} - Element WlNotAvailable not found. Start filling the forms.")
 
+                            time.sleep(2)
+
                             with open("files/passport_form.html", "w") as f:
                                 f.write(driver.page_source)
 
                             otp_send = driver.find_element(By.ID,"otp-send")
                             otp_send.click()
 
-                            s0 = Select(driver.find_element(By.ID, "typeofbookingddl"))
-                            s0.select_by_value(user_config.get("booking_value"))
+                            def fill_and_check_select(driver):
+                                select_id = "typeofbookingddl"
+                                select_value = "booking_value"
+                                try:
+                                    select = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.ID, select_id)))
+                                    select_elem = Select(select)
+                                    select_elem.select_by_value(select_value)
+                                except (NoSuchElementException, StaleElementReferenceException, TimeoutException):
+                                    return False
 
-                            if user_config["booking_value"] == "2":
-                                s1 = Select(driver.find_element(By.ID, "ddlnumberofcompanions"))
-                                s1.select_by_value(user_config.get("number_of_companions"))
+                                time.sleep(8)
+
+                                try:
+                                    selected_option = select_elem.first_selected_option
+                                    if selected_option.get_attribute("value") == select_value:
+                                        return True
+                                except (NoSuchElementException, StaleElementReferenceException):
+                                    return False
+
+                                return False
+
+                            if fill_and_check_select(driver, "typeofbookingddl"):
+                                logging.info(f"Timestamp: {str(datetime.now())} - Select 'typeofbookingddl' filled correctly")
+                            else:
+                                while not fill_and_check_select(driver, "typeofbookingddl"):
+                                    logging.info(f"Timestamp: {str(datetime.now())} - Select 'typeofbookingddl' is not available right now. Retrying fill_and_check_select.")
+
+                            # s0 = Select(driver.find_element(By.ID, "typeofbookingddl"))
+                            # s0.select_by_value(user_config.get("booking_value"))
 
                             q0 = driver.find_element(By.ID, "DatiAddizionaliPrenotante_0___testo")
                             q0.send_keys(user_config.get("full_address"))
 
-                            s2 = Select(driver.find_element(By.ID, "ddls_1"))
-                            s2.select_by_visible_text(user_config.get("has_under_age_children"))
-
                             q1 = driver.find_element(By.ID, "DatiAddizionaliPrenotante_2___testo")
                             q1.send_keys(user_config.get("total_children"))
 
-                            s3 = Select(driver.find_element(By.ID,"ddls_3"))
-                            s3.select_by_visible_text(user_config.get("marital_status"))
-
                             q2 = driver.find_element(By.ID, "DatiAddizionaliPrenotante_4___testo")
                             q2.send_keys(user_config.get("name_surname_couple"))
-
-                            s4 = Select(driver.find_element(By.ID,"ddls_5"))
-                            s4.select_by_visible_text(user_config.get("possess_expired_passport"))
 
                             q3 = driver.find_element(By.ID, "DatiAddizionaliPrenotante_6___testo")
                             q3.send_keys(user_config.get("passport_number"))
 
                             q4 = driver.find_element(By.ID, "DatiAddizionaliPrenotante_7___testo")
                             q4.send_keys(user_config.get("height"))
-
-                            s5 = Select(driver.find_element(By.ID,"ddls_8"))
-                            s5.select_by_visible_text(user_config.get("eye_color"))
 
                             # time.sleep(1)
 
@@ -224,35 +233,20 @@ class Prenota:
                                 date_1 = driver.find_element(By.ID,"Accompagnatori_0__DataNascitaAccompagnatore")
                                 date_1.send_keys(user_config.get("date_of_birth_1"))
 
-                                s6 = Select(driver.find_element(By.ID,"TypeOfRelationDDL0"))
-                                s6.select_by_visible_text(user_config.get("kinship_relationship_1"))
-
                                 q7 = driver.find_element(By.ID, "Accompagnatori_0__DatiAddizionaliAccompagnatore_0___testo")
                                 q7.send_keys(user_config.get("full_address_1"))
-
-                                s7 = Select(driver.find_element(By.ID,"ddlsAcc_0_1"))
-                                s7.select_by_visible_text(user_config.get("has_under_age_children_1"))
 
                                 q8 = driver.find_element(By.ID, "Accompagnatori_0__DatiAddizionaliAccompagnatore_2___testo")
                                 q8.send_keys(user_config.get("total_children_1"))
 
-                                s8 = Select(driver.find_element(By.ID,"ddlsAcc_0_3"))
-                                s8.select_by_visible_text(user_config.get("marital_status_1"))
-
                                 q9 = driver.find_element(By.ID, "Accompagnatori_0__DatiAddizionaliAccompagnatore_4___testo")
                                 q9.send_keys(user_config.get("name_surname_couple_1"))
-
-                                s9 = Select(driver.find_element(By.ID,"ddlsAcc_0_5"))
-                                s9.select_by_visible_text(user_config.get("possess_expired_passport_1"))
 
                                 q10 = driver.find_element(By.ID, "Accompagnatori_0__DatiAddizionaliAccompagnatore_6___testo")
                                 q10.send_keys(user_config.get("passport_number_1"))
 
                                 q11 = driver.find_element(By.ID, "Accompagnatori_0__DatiAddizionaliAccompagnatore_7___testo")
                                 q11.send_keys(user_config.get("height_1"))
-
-                                s10 = Select(driver.find_element(By.ID,"ddlsAcc_0_8"))
-                                s10.select_by_visible_text(user_config.get("eye_color_1"))
 
                                 # time.sleep(1)
 
@@ -263,6 +257,45 @@ class Prenota:
 
                                 file1 = driver.find_element(By.XPATH,'//*[@id="Accompagnatori_0__DocumentiAccompagnatore_1___File"]')
                                 file1.send_keys(os.getcwd() + "/files/residencia_1.pdf")
+
+                            def check_selects(driver, user_config):
+                                select_info = {
+                                    # "typeofbookingddl": user_config.get("booking_value"),
+                                    "ddlnumberofcompanions": user_config.get("number_of_companions"),
+                                    "ddls_1": user_config.get("has_under_age_children"),
+                                    "ddls_3": user_config.get("marital_status"),
+                                    "ddls_5": user_config.get("possess_expired_passport"),
+                                    "ddls_8": user_config.get("eye_color"),
+                                    "TypeOfRelationDDL0": user_config.get("kinship_relationship_1"),
+                                    "ddlsAcc_0_1": user_config.get("has_under_age_children_1"),
+                                    "ddlsAcc_0_3": user_config.get("marital_status_1"),
+                                    "ddlsAcc_0_5": user_config.get("possess_expired_passport_1"),
+                                    "ddlsAcc_0_8": user_config.get("eye_color_1")
+                                }
+
+                                for select_id, select_value in select_info.items():
+                                    try:
+                                        select = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.ID, select_id)))
+                                        select_elem = Select(select)
+                                        select_elem.select_by_value(select_value)
+                                    except (NoSuchElementException, StaleElementReferenceException, TimeoutException):
+                                        return False
+
+                                time.sleep(2)
+
+                                selects = driver.find_elements(By.TAG_NAME, "select")
+                                for select in selects:
+                                    try:
+                                        s = Select(select)
+                                        if len(s.options) == 0:
+                                            return False
+                                    except StaleElementReferenceException:
+                                        pass  # Ignore stale elements
+                                
+                                return True
+
+                            while not check_selects(driver):
+                                logging.info(f"Timestamp: {str(datetime.now())} - Selects are not available right now. Running check_selects function again")
 
                             otp_input = driver.find_element(By.ID,"otp-input")
                             otp_code = input("Insert the OTP code arrived in mail: ")
