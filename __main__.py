@@ -167,32 +167,23 @@ class Prenota:
                             otp_send = driver.find_element(By.ID,"otp-send")
                             otp_send.click()
 
-                            def fill_and_check_select(driver):
-                                select_id = "typeofbookingddl"
-                                select_value = "booking_value"
+                            select_id = "typeofbookingddl"
+                            select_value = "booking_value"
+                            def fill_and_check_select(driver, select_id, select_value):
                                 try:
                                     select = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.ID, select_id)))
                                     select_elem = Select(select)
                                     select_elem.select_by_value(select_value)
+
+                                    time.sleep(8)
+
+                                    selected_option = select_elem.first_selected_option
+                                    return selected_option.get_attribute("value") == select_value
                                 except (NoSuchElementException, StaleElementReferenceException, TimeoutException):
                                     return False
 
-                                time.sleep(8)
-
-                                try:
-                                    selected_option = select_elem.first_selected_option
-                                    if selected_option.get_attribute("value") == select_value:
-                                        return True
-                                except (NoSuchElementException, StaleElementReferenceException):
-                                    return False
-
-                                return False
-
-                            if fill_and_check_select(driver, "typeofbookingddl"):
-                                logging.info(f"Timestamp: {str(datetime.now())} - Select 'typeofbookingddl' filled correctly")
-                            else:
-                                while not fill_and_check_select(driver, "typeofbookingddl"):
-                                    logging.info(f"Timestamp: {str(datetime.now())} - Select 'typeofbookingddl' is not available right now. Retrying fill_and_check_select.")
+                            while not fill_and_check_select(driver, select_id, select_value):
+                                logging.info(f"Timestamp: {str(datetime.now())} - Select '{select_id}' is not available right now. Retrying fill_and_check_select.")
 
                             # s0 = Select(driver.find_element(By.ID, "typeofbookingddl"))
                             # s0.select_by_value(user_config.get("booking_value"))
