@@ -156,8 +156,11 @@ class Prenota:
                                 q0 = driver.find_element(By.ID, "DatiAddizionaliPrenotante_0___testo")
                                 q0.send_keys(user_config.get("full_address"))
 
-                                # s2 = Select(driver.find_element(By.ID, "ddls_1"))
+                                s2 = Select(driver.find_element(By.ID, "ddls_1"))
                                 # s2.select_by_visible_text(user_config.get("has_under_age_children"))
+                                # s2 = WebDriverWait(driver, 6).until(EC.presence_of_element_located((By.ID, "ddls_1")))
+                                se2 = s2._el
+                                driver.execute_script("arguments[0].value = arguments[1];", se2, user_config.get("has_under_age_children"))
 
                                 q1 = driver.find_element(By.ID, "DatiAddizionaliPrenotante_2___testo")
                                 q1.send_keys(user_config.get("total_children"))
@@ -209,6 +212,8 @@ class Prenota:
 
                                     # s7 = Select(driver.find_element(By.ID,"ddlsAcc_0_1"))
                                     # s7.select_by_visible_text(user_config.get("has_under_age_children_1"))
+                                    s7 = WebDriverWait(driver, 6).until(EC.presence_of_element_located((By.ID, "ddlsAcc_0_1")))
+                                    driver.execute_script("arguments[0].value = arguments[1];", s7, user_config.get("has_under_age_children_1"))
 
                                     q8 = driver.find_element(By.ID, "Accompagnatori_0__DatiAddizionaliAccompagnatore_2___testo")
                                     q8.send_keys(user_config.get("total_children_1"))
