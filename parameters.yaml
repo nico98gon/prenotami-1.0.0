@@ -7,22 +7,22 @@ full_address: "Lavalle 4301 San Juan" # Full residential address
 has_under_age_children: "Si" #Si or No
 total_children: "1" # Total number of children
 marital_status: "Divorziato/a" # 'Coniugato/a', 'Divorziato/a', 'Vedovo/a', 'Celibe/Nubile', 'Separato/a', 'Unito/a Civilmente' 'Separato/a da Un. Civ.', 'Divorziato/a da Un. Civ.', 'Vedovo/a da Un. Civ.'
-name_surname_couple: "Mariela Mingorance"
+name_surname_couple: "Mariela Mingorance" # couple companion name or Na
 possess_expired_passport: "Si" # Si or No
-passport_number: "AA3978076"
+passport_number: "AA3978076" # Example: AA3972053
 height: "178" # in cm
-eye_color: "Marrone" # 'Marrone' ------------------
+eye_color: "Marrone" # 'Marrone', 'Azzurro', 'Grigio', 'Nero', 'Verde'
 
 surname_1: "Amodey" # first companion surname
-name_1: "Alma Gabriella"
-date_of_birth_1: "27-07-2008" # have to be in this format "year-mm-dd"
+name_1: "Alma Gabriella" # first companion name
+date_of_birth_1: "07-27-2008" # have to be in this format "mm-dd-year"
 kinship_relationship_1: "Figlio/a" # --------------------
-full_address_1: "Lavalle 4301 San Juan"
+full_address_1: "Lavalle 4301 San Juan" # Full residential address
 has_under_age_children_1: "No" #Si or No
 total_children_1: "0" # Total number of children
-marital_status_1: "Cebile/Nubile" # 'Coniugato/a', 'Divorziato/a', 'Vedovo/a', 'Celibe/Nubile', 'Separato/a', 'Unito/a Civilmente' 'Separato/a da Un. Civ.', 'Divorziato/a da Un. Civ.', 'Vedovo/a da Un. Civ.'
-name_surname_couple_1: ""
+marital_status_1: "Celibe/Nubile" # 'Coniugato/a', 'Divorziato/a', 'Vedovo/a', 'Celibe/Nubile', 'Separato/a', 'Unito/a Civilmente' 'Separato/a da Un. Civ.', 'Divorziato/a da Un. Civ.', 'Vedovo/a da Un. Civ.'
+name_surname_couple_1: "Na" # couple companion name or Na
 possess_expired_passport_1: "Si" # Si or No
-passport_number_1: "AA3978072"
+passport_number_1: "AA3978072" # Example: AA3972053
 height_1: "160" # in cm
-eye_color_1: "Marrone" # 'Marrone' ------------------
+eye_color_1: "Marrone" # 'Marrone', 'Azzurro', 'Grigio', 'Nero', 'Verde'
