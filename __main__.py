@@ -123,30 +123,21 @@ class Prenota:
                         break		
                 elif user_config["request_type"] == "passport":
                     any_key = input("Press enter to start while loop that tries to access the form")
-                    def get_page(driver):
+                    def get_page(driver, user_config):
                         try:
                             driver.get("https://prenotami.esteri.it/Services/Booking/4685")
                             element = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.ID, "typeofbookingddl")))
+                            selected = Select(element)
+                            try:
+                                selected.select_by_value(user_config.get("booking_value"))
+                            except NoSuchElementException:
+                                return False
                             return True
                         except TimeoutException:
                             return False
 
-                    paused = False
                     while not get_page(driver):
                         logging.info(f"Timestamp: {str(datetime.now())} - Scheduling is not available right now. Running while function")
-                        
-                        if keyboard.is_pressed("p"):
-                            print("Bot paused. Press 'r' to continue.")
-                            while True:
-                                if keyboard.is_pressed("r"):
-                                    print("Bot resumed.")
-                                    break
-                                time.sleep(0.1)
-                            paused = False
-
-                        if paused:
-                            continue
-
                         time.sleep(2)
 
                     appts_available = driver.find_elements(By.XPATH, "//*[@id='WlNotAvailable']")
@@ -167,167 +158,117 @@ class Prenota:
                             otp_send = WebDriverWait(driver, 1000).until(EC.element_to_be_clickable((By.ID, "otp-send")))
                             otp_send.click()
 
-                            # select_id = "typeofbookingddl"
-                            # select_value = "booking_value"
-                            # def fill_and_check_select(driver, select_id, select_value):
-                            #     try:
-                            #         select = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.ID, select_id)))
-                            #         select_elem = Select(select)
-                            #         select_elem.select_by_value(select_value)
-
-                            #         time.sleep(8)
-
-                            #         selected_option = select_elem.first_selected_option
-                            #         return selected_option.get_attribute("value") == select_value
-                            #     except (NoSuchElementException, StaleElementReferenceException, TimeoutException):
-                            #         return False
-
-                            # while not fill_and_check_select(driver, select_id, select_value):
-                            #     logging.info(f"Timestamp: {str(datetime.now())} - Select '{select_id}' is not available right now. Retrying fill_and_check_select.")
-
-
-                            # s0 = Select(driver.find_element(By.ID, "typeofbookingddl"))
-                            # s0.select_by_value(user_config.get("booking_value"))
-
-                            # def fill_and_check_fields(driver, field_id, field_value):
-                            #     try:
-                            #         field = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.ID, field_id)))
-                            #         field.send_keys(field_value)
-
-                            #         time.sleep(1)
-
-                            #         if field.get_attribute("value") == field_value:
-                            #             return True
-                            #     except (NoSuchElementException, StaleElementReferenceException, TimeoutException):
-                            #         return False
-
-                            # while not fill_and_check_fields(driver, field_id, user_config.get("full_address")):
-                            #     logging.info(f"Timestamp: {str(datetime.now())} - Field '{field_id}' is not available right now. Retrying fill_and_check_fields.")
-
                             s0 = WebDriverWait(driver, 6).until(EC.presence_of_element_located((By.ID, "typeofbookingddl")))
                             driver.execute_script("arguments[0].value = arguments[1];", s0, user_config.get("booking_value"))
 
+                            if user_config["booking_value"] == "2":
+                                s1 = Select(driver.find_element(By.ID, "ddlnumberofcompanions"))
+                                o1 = s1.options
+                                if len(o1) > 0:
+                                    s1.select_by_value(user_config.get("number_of_companions"))
+                                else:
+                                    s1 = driver.find_element(By.ID,"ddlsAcc_0_8")
+                                    driver.execute_script("var new_select = document.createElement('select'); new_select.id = 'ddlnumberofcompanions'; var option1 = document.createElement('option'); option1.value = '1'; option1.text = '1'; new_select.appendChild(option1); var option2 = document.createElement('option'); option2.value = '2'; option2.text = '2'; new_select.appendChild(option2); var option3 = document.createElement('option'); option3.value = '3'; option3.text = '3'; new_select.appendChild(option3); var option4 = document.createElement('option'); option4.value = '4'; option4.text = '4'; new_select.appendChild(option4); var option5 = document.createElement('option'); option5.value = '5'; option5.text = '5'; new_select.appendChild(option5); arguments[0].parentNode.replaceChild(new_select, arguments[0]);", s1)
+                                    new_s1 = Select(driver.find_element(By.ID,"ddlsAcc_0_8"))
+                                    new_s1.select_by_value(user_config.get("number_of_companions"))
+
                             q0 = driver.find_element(By.ID, "DatiAddizionaliPrenotante_0___testo")
                             q0.send_keys(user_config.get("full_address"))
-                            time.sleep(0.1)
+
+                            s2 = driver.find_element(By.ID,"ddls_1")
+                            driver.execute_script("var new_select = document.createElement('select'); new_select.id = 'ddls_1'; new_select.setAttribute('data-index', '1'); new_select.setAttribute('onchange', 'ControloSelect(this)'); var option1 = document.createElement('option'); option1.value = '11'; option1.text = 'Si'; new_select.appendChild(option1); var option2 = document.createElement('option'); option2.value = '12'; option2.text = 'No'; new_select.appendChild(option2); arguments[0].parentNode.replaceChild(new_select, arguments[0]);", s2)
+                            new_s2 = Select(driver.find_element(By.ID,"ddls_1"))
+                            new_s2.select_by_visible_text(user_config.get("has_under_age_children"))
 
                             q1 = driver.find_element(By.ID, "DatiAddizionaliPrenotante_2___testo")
                             q1.send_keys(user_config.get("total_children"))
-                            time.sleep(0.1)
+
+                            s3 = driver.find_element(By.ID,"ddls_3")
+                            driver.execute_script("var new_select = document.createElement('select'); new_select.id = 'ddls_3'; new_select.setAttribute('data-index', '3'); new_select.setAttribute('onchange', 'ControloSelect(this)'); var option1 = document.createElement('option'); option1.value = '0'; option1.text = 'Coniugato/a'; new_select.appendChild(option1); var option2 = document.createElement('option'); option2.value = '13'; option2.text = 'Divorziato/a'; new_select.appendChild(option2); var option3 = document.createElement('option'); option3.value = '14'; option3.text = 'Vedovo/a'; new_select.appendChild(option3); var option4 = document.createElement('option'); option4.value = '15'; option4.text = 'Celibe/Nubile'; new_select.appendChild(option4); var option5 = document.createElement('option'); option5.value = '16'; option5.text = 'Separato/a'; new_select.appendChild(option5); var option6 = document.createElement('option'); option6.value = '17'; option6.text = 'Unito/a Civilmente'; new_select.appendChild(option6); var option7 = document.createElement('option'); option7.value = '18'; option7.text = 'Separato/a da Un. Civ.'; new_select.appendChild(option7); var option8 = document.createElement('option'); option8.value = '19'; option8.text = 'Divorziato/a da Un. Civ.'; new_select.appendChild(option8); var option9 = document.createElement('option'); option9.value = '20'; option9.text = 'Vedovo/a da Un. Civ.'; new_select.appendChild(option9); arguments[0].parentNode.replaceChild(new_select, arguments[0]);", s3)
+                            new_s3 = Select(driver.find_element(By.ID,"ddls_3"))
+                            new_s3.select_by_visible_text(user_config.get("marital_status"))
 
                             q2 = driver.find_element(By.ID, "DatiAddizionaliPrenotante_4___testo")
                             q2.send_keys(user_config.get("name_surname_couple"))
-                            time.sleep(0.1)
+
+                            s4 = driver.find_element(By.ID,"ddls_5")
+                            driver.execute_script("var new_select = document.createElement('select'); new_select.id = 'ddls_5'; new_select.setAttribute('data-index', '5'); new_select.setAttribute('onchange', 'ControloSelect(this)'); var option1 = document.createElement('option'); option1.value = '0'; option1.text = 'Si'; new_select.appendChild(option1); var option2 = document.createElement('option'); option2.value = '1'; option2.text = 'No'; new_select.appendChild(option2); arguments[0].parentNode.replaceChild(new_select, arguments[0]);", s4)
+                            new_s4 = Select(driver.find_element(By.ID,"ddls_5"))
+                            new_s4.select_by_visible_text(user_config.get("possess_expired_passport"))
 
                             q3 = driver.find_element(By.ID, "DatiAddizionaliPrenotante_6___testo")
                             q3.send_keys(user_config.get("passport_number"))
-                            time.sleep(0.1)
 
                             q4 = driver.find_element(By.ID, "DatiAddizionaliPrenotante_7___testo")
                             q4.send_keys(user_config.get("height"))
 
-                            time.sleep(1)
+                            s5 = driver.find_element(By.ID,"ddls_8")
+                            driver.execute_script("var new_select = document.createElement('select'); new_select.id = 'ddls_8'; new_select.setAttribute('data-index', '8'); new_select.setAttribute('onchange', 'ControloSelect(this)'); var option1 = document.createElement('option'); option1.value = '22'; option1.text = 'Azzurro'; new_select.appendChild(option1); var option2 = document.createElement('option'); option2.value = '23'; option2.text = 'Marrone'; new_select.appendChild(option2); var option3 = document.createElement('option'); option3.value = '24'; option3.text = 'Grigio'; new_select.appendChild(option3); var option4 = document.createElement('option'); option4.value = '25'; option4.text = 'Nero'; new_select.appendChild(option4); var option5 = document.createElement('option'); option5.value = '26'; option5.text = 'Verde'; new_select.appendChild(option5); arguments[0].parentNode.replaceChild(new_select, arguments[0]);", s5)
+                            new_s5 = Select(driver.find_element(By.ID,"ddls_8"))
+                            new_s5.select_by_visible_text(user_config.get("eye_color"))
 
                             file0 = driver.find_element(By.XPATH,'//*[@id="File_0"]')
                             file0.send_keys(os.getcwd() + "/files/identidade.pdf")
 
-                            time.sleep(1)
-
                             file1 = driver.find_element(By.XPATH,'//*[@id="File_1"]')
                             file1.send_keys(os.getcwd() + "/files/residencia.pdf")
-                            time.sleep(0.1)
-
 
                             # Additional applicant data
                             if user_config["booking_value"] == "2":
                                 q5 = driver.find_element(By.ID, "Accompagnatori_0__CognomeAccompagnatore")
                                 q5.send_keys(user_config.get("surname_1"))
-                                time.sleep(0.1)
-
                                 
                                 q6 = driver.find_element(By.ID, "Accompagnatori_0__NomeAccompagnatore")
                                 q6.send_keys(user_config.get("name_1"))
-                                time.sleep(0.1)
-
 
                                 date_1 = driver.find_element(By.ID,"Accompagnatori_0__DataNascitaAccompagnatore")
                                 date_1.send_keys(user_config.get("date_of_birth_1"))
-                                time.sleep(0.1)
 
+                                s6 = Select(driver.find_element(By.ID, "TypeOfRelationDDL0"))
+                                try:
+                                    s6.select_by_visible_text(user_config.get("kinship_relationship_1"))
+                                except NoSuchElementException:
+                                    print("kinship_relationship_1 select options are not available")
+
+                                # s6 = driver.find_element(By.ID,"TypeOfRelationDDL0")
+
+                                # new_s6 = Select(driver.find_element(By.ID,"TypeOfRelationDDL0"))
+                                # new_s6.select_by_visible_text(user_config.get("kinship_relationship_1"))
 
                                 q7 = driver.find_element(By.ID, "Accompagnatori_0__DatiAddizionaliAccompagnatore_0___testo")
                                 q7.send_keys(user_config.get("full_address_1"))
-                                time.sleep(0.1)
 
+                                s7 = driver.find_element(By.ID,"ddlsAcc_0_1")
+                                driver.execute_script("var new_select = document.createElement('select'); new_select.id = 'ddlsAcc_0_1'; new_select.setAttribute('data-index', '1'); new_select.setAttribute('onchange', 'ControloSelect(this)'); var option1 = document.createElement('option'); option1.value = '0'; option1.text = 'Si'; new_select.appendChild(option1); var option2 = document.createElement('option'); option2.value = '0'; option2.text = 'No'; new_select.appendChild(option2); arguments[0].parentNode.replaceChild(new_select, arguments[0]);", s7)
+                                new_s7 = Select(driver.find_element(By.ID,"ddlsAcc_0_1"))
+                                new_s7.select_by_visible_text(user_config.get("has_under_age_children_1"))
 
                                 q8 = driver.find_element(By.ID, "Accompagnatori_0__DatiAddizionaliAccompagnatore_2___testo")
                                 q8.send_keys(user_config.get("total_children_1"))
-                                time.sleep(0.1)
 
+                                s8 = driver.find_element(By.ID,"ddlsAcc_0_3")
+                                driver.execute_script("var new_select = document.createElement('select'); new_select.id = 'ddlsAcc_0_3'; new_select.setAttribute('data-index', '3'); new_select.setAttribute('onchange', 'ControloSelect(this)'); var option1 = document.createElement('option'); option1.value = '13'; option1.text = 'Coniugato/a'; new_select.appendChild(option1); var option2 = document.createElement('option'); option2.value = '14'; option2.text = 'Divorziato/a'; new_select.appendChild(option2); var option3 = document.createElement('option'); option3.value = '15'; option3.text = 'Vedovo/a'; new_select.appendChild(option3); var option4 = document.createElement('option'); option4.value = '16'; option4.text = 'Celibe/Nubile'; new_select.appendChild(option4); var option5 = document.createElement('option'); option5.value = '17'; option5.text = 'Separato/a'; new_select.appendChild(option5); var option6 = document.createElement('option'); option6.value = '18'; option6.text = 'Unito/a Civilmente'; new_select.appendChild(option6); var option7 = document.createElement('option'); option7.value = '19'; option7.text = 'Separato/a da Un. Civ.'; new_select.appendChild(option7); var option8 = document.createElement('option'); option8.value = '20'; option8.text = 'Divorziato/a da Un. Civ.'; new_select.appendChild(option8); var option9 = document.createElement('option'); option9.value = '21'; option9.text = 'Vedovo/a da Un. Civ.'; new_select.appendChild(option9); arguments[0].parentNode.replaceChild(new_select, arguments[0]);", s8)
+                                new_s8 = Select(driver.find_element(By.ID,"ddlsAcc_0_3"))
+                                new_s8.select_by_visible_text(user_config.get("marital_status_1"))
 
                                 q9 = driver.find_element(By.ID, "Accompagnatori_0__DatiAddizionaliAccompagnatore_4___testo")
                                 q9.send_keys(user_config.get("name_surname_couple_1"))
-                                time.sleep(0.1)
 
+                                s9 = driver.find_element(By.ID,"ddlsAcc_0_5")
+                                driver.execute_script("var new_select = document.createElement('select'); new_select.id = 'ddlsAcc_0_5'; new_select.setAttribute('data-index', '5'); new_select.setAttribute('onchange', 'ControloSelect(this)'); var option1 = document.createElement('option'); option1.value = '1'; option1.text = 'Si'; new_select.appendChild(option1); var option2 = document.createElement('option'); option2.value = '2'; option2.text = 'No'; new_select.appendChild(option2); arguments[0].parentNode.replaceChild(new_select, arguments[0]);", s9)
+                                new_s9 = Select(driver.find_element(By.ID,"ddlsAcc_0_5"))
+                                new_s9.select_by_visible_text(user_config.get("possess_expired_passport_1"))
 
                                 q10 = driver.find_element(By.ID, "Accompagnatori_0__DatiAddizionaliAccompagnatore_6___testo")
                                 q10.send_keys(user_config.get("passport_number_1"))
-                                time.sleep(0.1)
-
 
                                 q11 = driver.find_element(By.ID, "Accompagnatori_0__DatiAddizionaliAccompagnatore_7___testo")
                                 q11.send_keys(user_config.get("height_1"))
 
-                                time.sleep(1)
-
-                                file0 = driver.find_element(By.XPATH,'//*[@id="Accompagnatori_0__DocumentiAccompagnatore_0___File"]')
-                                file0.send_keys(os.getcwd() + "/files/identidade_1.pdf")
-
-                                time.sleep(1)
-
-                                file1 = driver.find_element(By.XPATH,'//*[@id="Accompagnatori_0__DocumentiAccompagnatore_1___File"]')
-                                file1.send_keys(os.getcwd() + "/files/residencia_1.pdf")
-                                time.sleep(0.1)
-
-
-                            def check_selects(driver, user_config):
-                                select_info = {
-                                    # "typeofbookingddl": user_config.get("booking_value"),
-                                    "ddlnumberofcompanions": user_config.get("number_of_companions"),
-                                    "ddls_1": user_config.get("has_under_age_children"),
-                                    "ddls_3": user_config.get("marital_status"),
-                                    "ddls_5": user_config.get("possess_expired_passport"),
-                                    "ddls_8": user_config.get("eye_color"),
-                                    "TypeOfRelationDDL0": user_config.get("kinship_relationship_1"),
-                                    "ddlsAcc_0_1": user_config.get("has_under_age_children_1"),
-                                    "ddlsAcc_0_3": user_config.get("marital_status_1"),
-                                    "ddlsAcc_0_5": user_config.get("possess_expired_passport_1"),
-                                    "ddlsAcc_0_8": user_config.get("eye_color_1")
-                                }
-
-                                for select_id, select_value in select_info.items():
-                                    try:
-                                        select = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.ID, select_id)))
-                                        select_elem = Select(select)
-                                        select_elem.select_by_value(select_value)
-                                    except (NoSuchElementException, StaleElementReferenceException, TimeoutException):
-                                        return False
-
-                                time.sleep(2)
-
-                                selects = driver.find_elements(By.TAG_NAME, "select")
-                                for select in selects:
-                                    try:
-                                        s = Select(select)
-                                        if len(s.options) == 0:
-                                            return False
-                                    except StaleElementReferenceException:
-                                        pass  # Ignore stale elements
-                                
-                                return True
-
-                            while not check_selects(driver):
-                                logging.info(f"Timestamp: {str(datetime.now())} - Selects are not available right now. Running check_selects function again")
+                                s10 = driver.find_element(By.ID,"ddlsAcc_0_8")
+                                driver.execute_script("var new_select = document.createElement('select'); new_select.id = 'ddlsAcc_0_8'; new_select.setAttribute('data-index', '8'); new_select.setAttribute('onchange', 'ControloSelect(this)'); var option1 = document.createElement('option'); option1.value = '22'; option1.text = 'Azzurro'; new_select.appendChild(option1); var option2 = document.createElement('option'); option2.value = '23'; option2.text = 'Marrone'; new_select.appendChild(option2); var option3 = document.createElement('option'); option3.value = '24'; option3.text = 'Grigio'; new_select.appendChild(option3); var option4 = document.createElement('option'); option4.value = '25'; option4.text = 'Nero'; new_select.appendChild(option4); var option5 = document.createElement('option'); option5.value = '26'; option5.text = 'Verde'; new_select.appendChild(option5); arguments[0].parentNode.replaceChild(new_select, arguments[0]);", s10)
+                                new_s10 = Select(driver.find_element(By.ID,"ddlsAcc_0_8"))
+                                new_s10.select_by_visible_text(user_config.get("eye_color_1"))
 
                             otp_input = driver.find_element(By.ID,"otp-input")
                             otp_code = input("Insert the OTP code arrived in mail: ")
