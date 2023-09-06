@@ -4,7 +4,7 @@ request_type: "passport" #this value should be either citizenship or passport
 booking_value: "2" # '1' = 'Single Reservation' & '2' = 'Multiple Booking'
 number_of_companions: "1" # from '1' to '5'
 full_address: "Lavalle 4301 San Juan" # Full residential address
-has_under_age_children: 11 #Si or No
+has_under_age_children: "Si" #Si or No
 total_children: "1" # Total number of children
 marital_status: "Divorziato/a" # 'Coniugato/a', 'Divorziato/a', 'Vedovo/a', 'Celibe/Nubile', 'Separato/a', 'Unito/a Civilmente' 'Separato/a da Un. Civ.', 'Divorziato/a da Un. Civ.', 'Vedovo/a da Un. Civ.'
 name_surname_couple: "Mariela Mingorance"
@@ -18,10 +18,10 @@ name_1: "Alma Gabriella"
 date_of_birth_1: "27-07-2008" # have to be in this format "year-mm-dd"
 kinship_relationship_1: "Figlio/a" # --------------------
 full_address_1: "Lavalle 4301 San Juan"
-has_under_age_children_1: 12 #Si or No
+has_under_age_children_1: "Si" #Si or No
 total_children_1: "0" # Total number of children
-marital_status_1: "Cebile/Nubile" # 'Coniugato/a', 'Divorziato/a', 'Vedovo/a', 'Celibe/Nubile', 'Separato/a', 'Unito/a Civilmente' 'Separato/a da Un. Civ.', 'Divorziato/a da Un. Civ.', 'Vedovo/a da Un. Civ.'
-name_surname_couple_1: ""
+marital_status_1: "Celibe/Nubile" # 'Coniugato/a', 'Divorziato/a', 'Vedovo/a', 'Celibe/Nubile', 'Separato/a', 'Unito/a Civilmente' 'Separato/a da Un. Civ.', 'Divorziato/a da Un. Civ.', 'Vedovo/a da Un. Civ.'
+name_surname_couple_1: "Na"
 possess_expired_passport_1: "Si" # Si or No
 passport_number_1: "AA3978072"
 height_1: "160" # in cm
