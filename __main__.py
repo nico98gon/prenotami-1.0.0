@@ -158,6 +158,7 @@ class Prenota:
                             otp_send = WebDriverWait(driver, 1000).until(EC.element_to_be_clickable((By.ID, "otp-send")))
                             otp_send.click()
 
+                            time.sleep(6)
                             s0 = driver.find_element(By.ID,"typeofbookingddl")
                             driver.execute_script("var new_select = document.createElement('select'); new_select.id = 'typeofbookingddl'; var option1 = document.createElement('option'); option1.value = '1'; option1.text = 'Prenotazione Singola'; new_select.appendChild(option1); var option2 = document.createElement('option'); option2.value = '2'; option2.text = 'Prenotazione Multipla'; new_select.appendChild(option2); arguments[0].parentNode.replaceChild(new_select, arguments[0]);", s0)
                             new_s1 = Select(driver.find_element(By.ID,"typeofbookingddl"))
@@ -169,6 +170,7 @@ class Prenota:
                                 new_s1 = Select(driver.find_element(By.ID,"ddlnumberofcompanions"))
                                 new_s1.select_by_value(user_config.get("number_of_companions"))
 
+                            time.sleep(6)
                             q0 = driver.find_element(By.ID, "DatiAddizionaliPrenotante_0___testo")
                             q0.send_keys(user_config.get("full_address"))
 
