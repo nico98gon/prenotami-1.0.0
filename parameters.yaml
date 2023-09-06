@@ -15,7 +15,7 @@ eye_color: "Marrone" # 'Marrone', 'Azzurro', 'Grigio', 'Nero', 'Verde'
 
 surname_1: "Amodey" # first companion surname
 name_1: "Alma Gabriella" # first companion name
-date_of_birth_1: "27-07-2008" # have to be in this format "year-mm-dd"
+date_of_birth_1: "07-27-2008" # have to be in this format "mm-dd-year"
 kinship_relationship_1: "Figlio/a" # --------------------
 full_address_1: "Lavalle 4301 San Juan" # Full residential address
 has_under_age_children_1: "Si" #Si or No
