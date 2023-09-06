@@ -146,19 +146,16 @@ class Prenota:
                                 with open("files/passport_form.html", "w") as f:
                                     f.write(driver.page_source)
 
-                                s0 = Select(driver.find_element(By.ID, "typeofbookingddl"))
-                                s0.select_by_value(user_config.get("booking_value"))
+                                s0 = driver.find_element(By.ID,"typeofbookingddl")
+                                driver.execute_script("var new_select = document.createElement('select'); new_select.id = 'typeofbookingddl'; var option1 = document.createElement('option'); option1.value = '1'; option1.text = 'Prenotazione Singola'; new_select.appendChild(option1); var option2 = document.createElement('option'); option2.value = '2'; option2.text = 'Prenotazione Multipla'; new_select.appendChild(option2); arguments[0].parentNode.replaceChild(new_select, arguments[0]);", s0)
+                                new_s1 = Select(driver.find_element(By.ID,"typeofbookingddl"))
+                                new_s1.select_by_value(user_config.get("booking_value"))
 
                                 if user_config["booking_value"] == "2":
-                                    s1 = Select(driver.find_element(By.ID, "ddlnumberofcompanions"))
-                                    o1 = s1.options
-                                    if len(o1) > 0:
-                                        s1.select_by_value(user_config.get("number_of_companions"))
-                                    else:
-                                        s1 = driver.find_element(By.ID,"ddlsAcc_0_8")
-                                        driver.execute_script("var new_select = document.createElement('select'); new_select.id = 'ddlnumberofcompanions'; var option1 = document.createElement('option'); option1.value = '1'; option1.text = '1'; new_select.appendChild(option1); var option2 = document.createElement('option'); option2.value = '2'; option2.text = '2'; new_select.appendChild(option2); var option3 = document.createElement('option'); option3.value = '3'; option3.text = '3'; new_select.appendChild(option3); var option4 = document.createElement('option'); option4.value = '4'; option4.text = '4'; new_select.appendChild(option4); var option5 = document.createElement('option'); option5.value = '5'; option5.text = '5'; new_select.appendChild(option5); arguments[0].parentNode.replaceChild(new_select, arguments[0]);", s1)
-                                        new_s1 = Select(driver.find_element(By.ID,"ddlsAcc_0_8"))
-                                        new_s1.select_by_value(user_config.get("number_of_companions"))
+                                    s1 = driver.find_element(By.ID,"ddlnumberofcompanions")
+                                    driver.execute_script("var new_select = document.createElement('select'); new_select.id = 'ddlnumberofcompanions'; var option1 = document.createElement('option'); option1.value = '1'; option1.text = '1'; new_select.appendChild(option1); var option2 = document.createElement('option'); option2.value = '2'; option2.text = '2'; new_select.appendChild(option2); var option3 = document.createElement('option'); option3.value = '3'; option3.text = '3'; new_select.appendChild(option3); var option4 = document.createElement('option'); option4.value = '4'; option4.text = '4'; new_select.appendChild(option4); var option5 = document.createElement('option'); option5.value = '5'; option5.text = '5'; new_select.appendChild(option5); arguments[0].parentNode.replaceChild(new_select, arguments[0]);", s1)
+                                    new_s1 = Select(driver.find_element(By.ID,"ddlnumberofcompanions"))
+                                    new_s1.select_by_value(user_config.get("number_of_companions"))
 
                                 q0 = driver.find_element(By.ID, "DatiAddizionaliPrenotante_0___testo")
                                 q0.send_keys(user_config.get("full_address"))
