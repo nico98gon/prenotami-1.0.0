@@ -158,11 +158,14 @@ class Prenota:
                             otp_send = WebDriverWait(driver, 1000).until(EC.element_to_be_clickable((By.ID, "otp-send")))
                             otp_send.click()
 
-                            time.sleep(6)
-                            s0 = driver.find_element(By.ID,"typeofbookingddl")
-                            driver.execute_script("var new_select = document.createElement('select'); new_select.id = 'typeofbookingddl'; var option1 = document.createElement('option'); option1.value = '1'; option1.text = 'Prenotazione Singola'; new_select.appendChild(option1); var option2 = document.createElement('option'); option2.value = '2'; option2.text = 'Prenotazione Multipla'; new_select.appendChild(option2); arguments[0].parentNode.replaceChild(new_select, arguments[0]);", s0)
-                            new_s1 = Select(driver.find_element(By.ID,"typeofbookingddl"))
-                            new_s1.select_by_value(user_config.get("booking_value"))
+                            time.sleep(15)
+                            # s0 = driver.find_element(By.ID,"typeofbookingddl")
+                            # driver.execute_script("var new_select = document.createElement('select'); new_select.id = 'typeofbookingddl'; var option1 = document.createElement('option'); option1.value = '1'; option1.text = 'Prenotazione Singola'; new_select.appendChild(option1); var option2 = document.createElement('option'); option2.value = '2'; option2.text = 'Prenotazione Multipla'; new_select.appendChild(option2); arguments[0].parentNode.replaceChild(new_select, arguments[0]);", s0)
+                            # new_s1 = Select(driver.find_element(By.ID,"typeofbookingddl"))
+                            # new_s1.select_by_value(user_config.get("booking_value"))
+
+                            s0 = Select(driver.find_element(By.ID,"typeofbookingddl"))
+                            s0.select_by_value(user_config.get("booking_value"))
 
                             if user_config["booking_value"] == "2":
                                 s1 = driver.find_element(By.ID,"ddlnumberofcompanions")
@@ -170,7 +173,7 @@ class Prenota:
                                 new_s1 = Select(driver.find_element(By.ID,"ddlnumberofcompanions"))
                                 new_s1.select_by_value(user_config.get("number_of_companions"))
 
-                            time.sleep(6)
+                            time.sleep(15)
                             q0 = driver.find_element(By.ID, "DatiAddizionaliPrenotante_0___testo")
                             q0.send_keys(user_config.get("full_address"))
 
@@ -209,12 +212,16 @@ class Prenota:
                             file0 = driver.find_element(By.XPATH,'//*[@id="File_0"]')
                             file0.send_keys(os.getcwd() + "/files/identidade.pdf")
 
+                            time.sleep(1)
+                            
                             file1 = driver.find_element(By.XPATH,'//*[@id="File_1"]')
                             file1.send_keys(os.getcwd() + "/files/residencia.pdf")
 
+                            time.sleep(15)
+
                             # Additional applicant data
                             if user_config["booking_value"] == "2":
-                                q5 = driver.find_element(By.ID, "Accompagnatori_0__CognomeAccompagnatore")
+                                q5 = driver.find_element(By.ID, "Accompagnatori_0__CognomelAccompagnatore")
                                 q5.send_keys(user_config.get("surname_1"))
                                 
                                 q6 = driver.find_element(By.ID, "Accompagnatori_0__NomeAccompagnatore")
