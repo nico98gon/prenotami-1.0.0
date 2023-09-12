@@ -146,10 +146,12 @@ class Prenota:
                                 with open("files/passport_form.html", "w") as f:
                                     f.write(driver.page_source)
 
-                                s0 = driver.find_element(By.ID,"typeofbookingddl")
-                                driver.execute_script("var new_select = document.createElement('select'); new_select.id = 'typeofbookingddl'; var option1 = document.createElement('option'); option1.value = '1'; option1.text = 'Prenotazione Singola'; new_select.appendChild(option1); var option2 = document.createElement('option'); option2.value = '2'; option2.text = 'Prenotazione Multipla'; new_select.appendChild(option2); arguments[0].parentNode.replaceChild(new_select, arguments[0]);", s0)
-                                new_s1 = Select(driver.find_element(By.ID,"typeofbookingddl"))
-                                new_s1.select_by_value(user_config.get("booking_value"))
+                                # s0 = driver.find_element(By.ID,"typeofbookingddl")
+                                # driver.execute_script("var new_select = document.createElement('select'); new_select.id = 'typeofbookingddl'; var option1 = document.createElement('option'); option1.value = '1'; option1.text = 'Prenotazione Singola'; new_select.appendChild(option1); var option2 = document.createElement('option'); option2.value = '2'; option2.text = 'Prenotazione Multipla'; new_select.appendChild(option2); arguments[0].parentNode.replaceChild(new_select, arguments[0]);", s0)
+                                # new_s1 = Select(driver.find_element(By.ID,"typeofbookingddl"))
+                                # new_s1.select_by_value(user_config.get("booking_value"))
+                                s0 = Select(driver.find_element(By.ID,"typeofbookingddl"))
+                                s0.select_by_value(user_config.get("booking_value"))
 
                                 if user_config["booking_value"] == "2":
                                     s1 = driver.find_element(By.ID,"ddlnumberofcompanions")
