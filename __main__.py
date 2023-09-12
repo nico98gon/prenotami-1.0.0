@@ -221,7 +221,7 @@ class Prenota:
 
                             # Additional applicant data
                             if user_config["booking_value"] == "2":
-                                q5 = driver.find_element(By.ID, "Accompagnatori_0__CognomelAccompagnatore")
+                                q5 = driver.find_element(By.ID, "Accompagnatori_0__CognomeAccompagnatore")
                                 q5.send_keys(user_config.get("surname_1"))
                                 
                                 q6 = driver.find_element(By.ID, "Accompagnatori_0__NomeAccompagnatore")
